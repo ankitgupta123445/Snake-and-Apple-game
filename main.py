@@ -79,14 +79,32 @@ class Game:
     def __init__(self):
         pygame.init()  # initialise the pygame module
         self.surface = pygame.display.set_mode((1000, 800))  # game window size
-        self.snake = Snake(self.surface, 5)
+        self.snake = Snake(self.surface, 2)
         self.snake.draw()
         self.apple = Apple(self.surface)
         self.apple.draw()
 
+    # this method define whether block coolide with apple if it is return true
+    def is_collision(self, x1, y1, x2, y2):
+        if x1 >= x2 and x1 < x2 + SIZE:
+            if y1 >= y2 and y1 < y2 + SIZE:
+                return True
+        return False
+
+    def display_score(self):
+        font = pygame.font.SysFont('arial', 30)
+        score = font.render(f"Score: {self.snake.length}", True, (200, 200, 200))
+        self.surface.blit(score, (850, 10))  # it update score
+
     def play(self):
         self.snake.walk()  # snake walk method
         self.apple.draw()  # apple method
+        self.display_score()  # display score method
+        pygame.display.flip()  # update screen continuously
+
+        if self.is_collision(self.snake.x[0], self.snake.y[0], self.apple.x, self.apple.y):
+            self.snake.increase_length()  # check only head if true then increse length
+            self.apple.move()  # apple position changes
 
     def run(self):
         running = True
@@ -111,7 +129,7 @@ class Game:
                 elif event.type == QUIT:
                     running = False
             self.play()
-            time.sleep(0.3)  # snake stopping time
+            time.sleep(0.2)  # snake stopping time
 
 
 if __name__ == '__main__':
