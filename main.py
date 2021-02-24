@@ -1,3 +1,4 @@
+import random
 import time
 
 import pygame
@@ -17,6 +18,9 @@ class Apple:
         self.parent_screen.blit(self.image, (self.x, self.y))
         pygame.display.flip()
 
+    def move(self):
+        self.x = random.randint(1, 25) * SIZE
+        self.y = random.randint(1, 20) * SIZE
 
 class Snake:
     def __init__(self, parent_screen, length):
